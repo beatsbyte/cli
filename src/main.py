@@ -1,8 +1,8 @@
 import sys
 import os
-from urllib import request
+import requests
 
-API_URL = "http://example.com/api/compress"
+API_URL = "http://localhost:8080/v1/compress-audio"
 
 def printHelp():
     print("Использование bb <команда> [аргументы]\n")
@@ -24,15 +24,17 @@ def compressAudio(filename):
     with open(filename, 'rb') as file:
         files = {'file': (filename, file, 'audio/mpeg')}
         try:
-            response = request.post(API_URL, files=files)
+            response = requests.post(API_URL, files=files)
 
             if response.status_code == 200:
-                with open(f"compressed_{filename}", 'wb') as compressed_file:
+                base_name, _ = os.path.splitext(filename) 
+                new_filename = f"{base_name}_compressed.mp3"
+                with open(new_filename, 'wb') as compressed_file:
                     compressed_file.write(response.content)
-                print(f"Файл успешно сжат и сохранён как 'compressed_{filename}'")
+                print(f"Файл успешно сжат и сохранён как '{new_filename}'")
             else:
                 print(f"Ошибка при отправке файла: {response.status_code} - {response.text}")
-        except request.exceptions.RequestException as e:
+        except requests.exceptions.RequestException as e:
             print(f"Ошибка при подключении к серверу: {e}")
 
 def main():

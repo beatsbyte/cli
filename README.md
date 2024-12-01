@@ -8,7 +8,7 @@
 
 3. Activate virtual environmen
 4. Install necessary packages via
-   `pip install requrements.txt`
+   `pip install -r requrements.txt`
 5. Run in activated environment
    ` python build.py`
    and cli executable is ready inside dist folder
